@@ -4,9 +4,8 @@ import Player from './Player'
 import Ball from './Ball'
 import io from 'socket.io-client'
 
-const socket = io("YOUR_SOCKET_SERVER_URL") // Replace with your backend WebSocket URL
+const socket = io("YOUR_SOCKET_SERVER_URL") 
 
-// Player state type
 interface PlayerState {
   id: number
   x: number
@@ -15,7 +14,6 @@ interface PlayerState {
   name: string
 }
 
-// Dummy images for players
 const dummyImages = [
   '/players/6.jpeg',
   '/players/p1.jpeg',
@@ -29,7 +27,6 @@ const dummyImages = [
   '/players/p10.jpeg',
 ]
 
-// Event types
 interface Event {
   type: 'goal' | 'foul' | 'substitution'
   player: string
@@ -39,10 +36,9 @@ interface Event {
 const Pitch: React.FC = () => {
   const [players, setPlayers] = useState<PlayerState[]>([])
   const [ballPosition, setBallPosition] = useState({ x: 50, y: 50 })
-  const [events, setEvents] = useState<Event[]>([]) // Store events
-  const [score, setScore] = useState({ teamA: 0, teamB: 0 }) // Add a score state
+  const [events, setEvents] = useState<Event[]>([]) 
+  const [score, setScore] = useState({ teamA: 0, teamB: 0 })
 
-  // Initialize players
   useEffect(() => {
     const initialPlayers: PlayerState[] = []
     for (let i = 0; i < 10; i++) {
@@ -55,10 +51,9 @@ const Pitch: React.FC = () => {
       })
     }
     setPlayers(initialPlayers)
-    socket.emit("initialPlayers", initialPlayers) // Send initial players to server
+    socket.emit("initialPlayers", initialPlayers) 
   }, [])
 
-  // Update player and ball positions
   useEffect(() => {
     const interval = setInterval(() => {
       setPlayers(prev =>
@@ -72,14 +67,13 @@ const Pitch: React.FC = () => {
         x: Math.min(95, Math.max(5, prev.x + (Math.random() * 10 - 5))),
         y: Math.min(95, Math.max(5, prev.y + (Math.random() * 10 - 5))),
       }))
-      socket.emit("updatePlayers", players) // Emit updated player positions
-      socket.emit("updateBall", ballPosition) // Emit updated ball position
+      socket.emit("updatePlayers", players) 
+      socket.emit("updateBall", ballPosition) 
     }, 1000)
 
     return () => clearInterval(interval)
   }, [players, ballPosition])
 
-  // Listen for real-time player, ball, and event updates
   useEffect(() => {
     socket.on("playerUpdate", (updatedPlayers: PlayerState[]) => {
       setPlayers(updatedPlayers)
@@ -91,7 +85,7 @@ const Pitch: React.FC = () => {
       setEvents(prev => [...prev, event])
     })
     socket.on("scoreUpdate", (updatedScore: { teamA: number, teamB: number }) => {
-      setScore(updatedScore) // Update score based on server updates
+      setScore(updatedScore) 
     })
 
     return () => {
@@ -102,7 +96,6 @@ const Pitch: React.FC = () => {
     }
   }, [])
 
-  // Simulate random events like goals, fouls, or substitutions
   useEffect(() => {
     const eventInterval = setInterval(() => {
       const eventTypes: Event['type'][] = ['goal', 'foul', 'substitution']
@@ -116,9 +109,8 @@ const Pitch: React.FC = () => {
       ])
       socket.emit("event", { type: randomEvent, player: randomPlayer, time: currentTime })
 
-      // Check if a goal event happens and update the score
       if (randomEvent === 'goal') {
-        const isTeamA = Math.random() < 0.5 // Randomly assign teams
+        const isTeamA = Math.random() < 0.5 
         if (isTeamA) {
           setScore(prev => ({ ...prev, teamA: prev.teamA + 1 }))
           socket.emit("scoreUpdate", { teamA: score.teamA + 1, teamB: score.teamB })
@@ -127,42 +119,54 @@ const Pitch: React.FC = () => {
           socket.emit("scoreUpdate", { teamA: score.teamA, teamB: score.teamB + 1 })
         }
       }
-    }, 5000) // Event triggers every 5 seconds
+    }, 5000) 
 
     return () => clearInterval(eventInterval)
   }, [score])
 
   return (
-    <div className="w-full h-[80vh] bg-green-600 relative rounded-lg overflow-hidden border-4 border-white">
-      {/* Score Display */}
-      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-white text-xl font-bold">
-        <p>Team A: {score.teamA} - Team B: {score.teamB}</p>
-      </div>
-
-      {/* Ball */}
-      <Ball x={ballPosition.x} y={ballPosition.y} />
-
-      {/* Player Images */}
-      {players.map((player) => (
-        <Player key={player.id} {...player} />
-      ))}
-
-      {/* Event overlays */}
-      {events.map((event, index) => (
-        <div
-          key={index}
-          className="absolute top-0 left-1/2 transform -translate-x-1/2 text-white text-xs sm:text-sm"
-          style={{
-            top: `${Math.random() * 90}%`,
-            left: `${Math.random() * 90}%`,
-          }}
-        >
-          <span className="bg-black bg-opacity-50 text-white px-1 py-0.5 rounded-md opacity-80">
-            {`${event.type.toUpperCase()} by ${event.player} at ${event.time}`}
-          </span>
+ 
+        <div className="w-full h-[80vh] bg-green-600 relative rounded-lg overflow-hidden border-4 border-white">
+          {/* Center Line */}
+          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-[2px] h-full bg-white opacity-60 z-10"></div>
+      
+          {/* Center Circle */}
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 border-2 border-white rounded-full opacity-80 z-10"></div>
+      
+          {/* Center Dot */}
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-white rounded-full z-10"></div>
+      
+          {/* Scoreboard */}
+          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-white text-xl font-bold z-20">
+            <p>Team A: {score.teamA} - Team B: {score.teamB}</p>
+          </div>
+      
+          {/* Ball */}
+          <Ball x={ballPosition.x} y={ballPosition.y} />
+      
+          {/* Players */}
+          {players.map((player) => (
+            <Player key={player.id} {...player} />
+          ))}
+      
+       
+          {events.map((event, index) => (
+            <div
+              key={index}
+              className="absolute text-white text-xs sm:text-sm z-20"
+              style={{
+                top: `${Math.random() * 90}%`,
+                left: `${Math.random() * 90}%`,
+              }}
+            >
+              <span className="bg-black bg-opacity-50 text-white px-1 py-0.5 rounded-md opacity-80">
+                {`${event.type.toUpperCase()} by ${event.player} at ${event.time}`}
+              </span>
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
+      
+      
   )
 }
 

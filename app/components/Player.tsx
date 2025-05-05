@@ -5,7 +5,7 @@ interface PlayerState {
   id: number
   x: number
   y: number
-  image: string // 🆕 player image
+  image: string 
   name?: string
 }
 

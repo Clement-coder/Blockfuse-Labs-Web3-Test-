@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Real-Time Football Pitch Visualizer
 
-## Getting Started
+A fun and interactive real-time football pitch built with **Next.js**, **Tailwind CSS**, **TypeScript**, and **Socket.IO**. Watch players move, track the ball, and see live match events like goals, fouls, and substitutions.
 
-First, run the development server:
+---
+
+##  Features
+
+Real-time player and ball movement (via WebSocket)
+Auto-generated in-game events (goal, foul, substitution)
+Live scoreboard updates
+Responsive UI styled with Tailwind CSS
+Smart random player positioning with collision-safe boundaries
+
+---
+
+## 🛠 Tech Stack
+
+- **Frontend**: Next.js 14 (App Router) + TypeScript  
+- **Styling**: Tailwind CSS  
+- **Real-Time Engine**: Socket.IO  
+- **State Management**: React Hooks (`useState`, `useEffect`)
+
+---
+
+## Installation
+
+Clone the repo and install dependencies:
 
 ```bash
+git clone https://github.com/Clement-coder/Blockfuse-Labs-Web3-Test-
+cd football-pitch
+npm install
+
+
+🧪 Run Locally
+Start the development server:
+
+bash
+Copy
+Edit
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Open http://localhost:3000 in your browser.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Ensure your Socket.IO server is running and matches the URL in the code (io("YOUR_SOCKET_SERVER_URL")).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+File Structure
+csharp
+Copy
+Edit
+components/
+├── Pitch.tsx       
+├── Player.tsx     
+└── Ball.tsx        
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+public/
+└── players/        
+Author
+Built with  by Clement Raymond
+🔧 Powered by Blockfuse Labs
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

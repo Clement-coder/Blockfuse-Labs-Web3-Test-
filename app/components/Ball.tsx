@@ -1,5 +1,5 @@
 
-// Ball.tsx
+
 import React from 'react';
 
 interface BallProps {

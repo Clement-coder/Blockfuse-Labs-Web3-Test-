@@ -29,6 +29,7 @@ Clone the repo and install dependencies:
 
 ```bash
 git clone https://github.com/Clement-coder/Blockfuse-Labs-Web3-Test-
+Vercle https://blockfuse-labs-web3-test-nine.vercel.app/
 cd football-pitch
 npm install
 
